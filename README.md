@@ -1,5 +1,8 @@
 # SAFEHELP AI - Backend
 
+> 🌐 **Live API Deployment (Render)**: [https://safehelp-ai-backend.onrender.com/api](https://safehelp-ai-backend.onrender.com/api)  
+> 🔗 **Live Health Check**: [https://safehelp-ai-backend.onrender.com/api/health](https://safehelp-ai-backend.onrender.com/api/health)
+
 ## Overview
 SAFEHELP AI Backend is an emergency assistance and accessibility API built with **Node.js**, **Express**, **Supabase PostgreSQL**, and **Google Gemini Multimodal AI**. It follows a strict **MVC (Model-View-Controller)** pattern with enterprise-grade data validation, security, and accessibility provisions.
 
