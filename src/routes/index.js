@@ -6,7 +6,21 @@ import contactRoutes from './contactRoutes.js';
 
 const router = Router();
 
-// Health Check
+// Health Check & Root API Information
+router.get('/', (req, res) => {
+  res.status(200).json({
+    status: 'OK',
+    service: 'SAFEHELP AI Backend API',
+    endpoints: {
+      health: '/api/health',
+      auth: '/api/auth',
+      ai: '/api/ai',
+      sos: '/api/sos',
+      contacts: '/api/contacts'
+    }
+  });
+});
+
 router.get('/health', (req, res) => {
   res.status(200).json({
     status: 'OK',
