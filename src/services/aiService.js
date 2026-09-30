@@ -1,4 +1,4 @@
-import { getGeminiModel, isGeminiConfigured } from '../config/gemini.js';
+import { getGeminiModel, isGeminiConfigured, generateWithFlash } from '../config/gemini.js';
 
 /**
  * Intelligent local triage parser fallback when API key is not present or offline
@@ -62,7 +62,6 @@ export const aiService = {
 
     if (isGeminiConfigured()) {
       try {
-        const model = getGeminiModel('gemini-1.5-flash');
         const prompt = `
 You are SafeHelp AI, an emergency dispatch and accessibility assistant.
 Analyze this emergency description and extract structured information in JSON format ONLY.
@@ -81,15 +80,15 @@ Required JSON schema:
   "recommended_action": "Immediate, short, safe action instructions for the user"
 }
 `;
-        const result = await model.generateContent(prompt);
-        const responseText = result.response.text().trim();
+        const { response, modelName } = await generateWithFlash(prompt);
+        const responseText = response.text().trim();
         
         // Clean possible markdown fences
         const cleaned = responseText.replace(/```json/gi, '').replace(/```/g, '').trim();
         const parsed = JSON.parse(cleaned);
         return {
           ...parsed,
-          confidence: 'gemini_multimodal'
+          confidence: `gemini_${modelName}`
         };
       } catch (err) {
         console.warn('Gemini text analysis error, using fallback analyzer:', err.message);
@@ -105,7 +104,6 @@ Required JSON schema:
   async analyzeEmergencyImage(imageBuffer, mimeType = 'image/jpeg', userPrompt = '') {
     if (isGeminiConfigured()) {
       try {
-        const model = getGeminiModel('gemini-1.5-flash');
         const imagePart = {
           inlineData: {
             data: imageBuffer.toString('base64'),
@@ -134,13 +132,13 @@ Return RAW JSON ONLY with NO markdown fences:
   "recommended_action": "Immediate safety advice based on visual scene"
 }
 `;
-        const result = await model.generateContent([prompt, imagePart]);
-        const responseText = result.response.text().trim();
+        const { response, modelName } = await generateWithFlash([prompt, imagePart]);
+        const responseText = response.text().trim();
         const cleaned = responseText.replace(/```json/gi, '').replace(/```/g, '').trim();
         const parsed = JSON.parse(cleaned);
         return {
           ...parsed,
-          confidence: 'gemini_vision'
+          confidence: `gemini_vision_${modelName}`
         };
       } catch (err) {
         console.warn('Gemini image analysis error, using fallback:', err.message);
