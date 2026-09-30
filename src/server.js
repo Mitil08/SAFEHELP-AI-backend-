@@ -11,12 +11,13 @@ const __dirname = path.dirname(__filename);
 
 const app = express();
 
-// Middlewares
+// Middlewares - Allow all domains in CORS
 app.use(cors({
-  origin: '*', // Allow local frontend and network access for mobile emergency testing
+  origin: '*',
   methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization']
+  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'Accept', 'Origin']
 }));
+app.options('*', cors());
 
 app.use(express.json({ limit: '20mb' }));
 app.use(express.urlencoded({ extended: true, limit: '20mb' }));

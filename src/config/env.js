@@ -17,5 +17,5 @@ export const ENV = {
   SUPABASE_ANON_KEY: process.env.SUPABASE_ANON_KEY || '',
   SUPABASE_SERVICE_ROLE_KEY: process.env.SUPABASE_SERVICE_ROLE_KEY || '',
   GEMINI_API_KEY: process.env.GEMINI_API_KEY || '',
-  CLIENT_ORIGIN: process.env.CLIENT_ORIGIN || 'http://localhost:5173'
+  CLIENT_ORIGIN: process.env.CLIENT_ORIGIN || '*'
 };
